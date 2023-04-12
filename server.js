@@ -68,11 +68,17 @@ async function viewAllDepartments() {
 }
 
 async function viewAllRoles() {
-  //  display roles goes here
+  const connection = await mysql.createConnection(dbConfig);
+  const [rows] = await connection.query('SELECT * FROM role');
+  console.table(rows);
+  await connection.end();
 }
 
 async function viewAllEmployees() {
-  //  display employees goes here
+  const connection = await mysql.createConnection(dbConfig);
+  const [rows] = await connection.query('SELECT * FROM employee');
+  console.table(rows);
+  await connection.end();
 }
 
 async function addDepartment() {
