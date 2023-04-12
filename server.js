@@ -82,7 +82,17 @@ async function viewAllEmployees() {
 }
 
 async function addDepartment() {
-  //  add a department goes here
+  const { departmentName } = await inquirer.prompt([
+    {
+      type: 'input',
+      name: 'departmentName',
+      message: 'Enter the department name:',
+    },
+  ]);
+
+  const connection = await mysql.createConnection(dbConfig);
+  await connection.query('INSERT INTO department (name) VALUES (?)', [departmentName]);
+  await connection.end();
 }
 
 async function addRole() {
