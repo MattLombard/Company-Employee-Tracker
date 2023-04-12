@@ -1,8 +1,13 @@
 const inquirer = require('inquirer');
-const mysql = require('mysql2');
+const mysql = require('mysql2/promise');
 const consoleTable = require('console.table');
 
-const inquirer = require('inquirer');
+const dbConfig = {
+  host: 'localhost',
+  user: 'root',
+  password: 'Rutgers01040104',
+  database: 'employees_db',
+};
 
 async function main() {
   while (true) {
@@ -56,7 +61,10 @@ async function main() {
 }
 
 async function viewAllDepartments() {
-  // display departments goes here
+  const connection = await mysql.createConnection(dbConfig);
+  const [rows] = await connection.query('SELECT * FROM department');
+  console.table(rows);
+  await connection.end();
 }
 
 async function viewAllRoles() {
