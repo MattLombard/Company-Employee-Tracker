@@ -96,7 +96,27 @@ async function addDepartment() {
 }
 
 async function addRole() {
-  //  add a role goes here
+  const { title, salary, departmentId } = await inquirer.prompt([
+    {
+      type: 'input',
+      name: 'title',
+      message: 'Enter the role title:',
+    },
+    {
+      type: 'input',
+      name: 'salary',
+      message: 'Enter the role salary:',
+    },
+    {
+      type: 'input',
+      name: 'departmentId',
+      message: 'Enter the department ID for the role:',
+    },
+  ]);
+
+  const connection = await mysql.createConnection(dbConfig);
+  await connection.query('INSERT INTO roles (title,department_id, salary) VALUES (?, ?, ?)', [title, departmentId, salary]);
+  await connection.end();
 }
 
 async function addEmployee() {
