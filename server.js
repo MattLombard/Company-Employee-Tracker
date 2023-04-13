@@ -11,6 +11,7 @@ const dbConfig = {
 
 async function main() {
   while (true) {
+    // Prompt the user to select an action to perform
     const { action } = await inquirer.prompt([
       {
         type: 'list',
@@ -31,11 +32,12 @@ async function main() {
         ],
       },
     ]);
-
+    // Check if the user selected "Exit", and break out of the loop if so
     if (action === 'Exit') {
       console.log('Goodbye!');
       break;
     }
+    // Call the appropriate function based on the user's selected action
 
     switch (action) {
       case 'View all departments':
@@ -73,16 +75,24 @@ async function main() {
 }
 
 async function viewAllDepartments() {
+  // Connect to the database
   const connection = await mysql.createConnection(dbConfig);
+  // Query the database for all departments
   const [rows] = await connection.query('SELECT * FROM department');
+  // Log the results to the console
   console.table(rows);
+  // Close the connection
   await connection.end();
 }
 
 async function viewAllRoles() {
+  // Connect to the database
   const connection = await mysql.createConnection(dbConfig);
+  // Query the database for all roles
   const [rows] = await connection.query('SELECT * FROM role');
+  // Log the results to the console
   console.table(rows);
+  // Close the connection
   await connection.end();
 }
 
@@ -94,6 +104,7 @@ async function viewAllEmployees() {
 }
 
 async function addDepartment() {
+  // Prompt the user for the name of the department they want to add
   const { departmentName } = await inquirer.prompt([
     {
       type: 'input',
@@ -103,11 +114,13 @@ async function addDepartment() {
   ]);
 
   const connection = await mysql.createConnection(dbConfig);
+  // Insert the department into the database
   await connection.query('INSERT INTO department (name) VALUES (?)', [departmentName]);
   await connection.end();
 }
 
 async function addRole() {
+  // Prompt the user for the role title, salary, and department ID
   const { title, salary, departmentId } = await inquirer.prompt([
     {
       type: 'input',
@@ -132,6 +145,7 @@ async function addRole() {
 }
 
 async function addEmployee() {
+  // Prompt the user for the employee's first name, last name, role ID, and manager ID
   const { firstName, lastName, roleId, managerId } = await inquirer.prompt([
     {
       type: 'input',
@@ -166,6 +180,7 @@ async function addEmployee() {
 }
 
 async function updateEmployeeRole() {
+  // Prompt the user for the employee ID and new role ID
   const { employeeId, newRoleId } = await inquirer.prompt([
     {
       type: 'input',
@@ -184,6 +199,7 @@ async function updateEmployeeRole() {
   await connection.end();
 }
 async function updateEmployeeManager() {
+  // Prompt the user for the employee ID and new manager ID
   const { employeeId, newManagerId } = await inquirer.prompt([
     {
       type: 'input',
@@ -204,6 +220,7 @@ async function updateEmployeeManager() {
 }
 
 async function viewEmployeesByManager() {
+  // Prompt the user for the manager ID they want to view
   const { managerId } = await inquirer.prompt([
     {
       type: 'input',
@@ -213,12 +230,14 @@ async function viewEmployeesByManager() {
   ]);
 
   const connection = await mysql.createConnection(dbConfig);
+  // Query the database for all employees with the manager ID
   const [rows] = await connection.query('SELECT * FROM employee WHERE manager_id = ?', [managerId]);
   console.table(rows);
   await connection.end();
 }
 
 async function viewEmployeesByDepartment() {
+  // Prompt the user for the department ID they want to view
   const { departmentId } = await inquirer.prompt([
     {
       type: 'input',
@@ -228,11 +247,13 @@ async function viewEmployeesByDepartment() {
   ]);
 
   const connection = await mysql.createConnection(dbConfig);
+  // Query the database for all employees in the department
   const [rows] = await connection.query(
-    'SELECT * FROM employee INNER JOIN roles ON employee.role_id = role.id WHERE role.department_id = ?',
+    'SELECT * FROM employee INNER JOIN role ON employee.role_id = role.id WHERE role.department_id = ?',
     [departmentId]
   );
   console.table(rows);
   await connection.end();
 }
+
 main();
