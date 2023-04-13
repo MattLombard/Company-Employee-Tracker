@@ -24,6 +24,7 @@ async function main() {
           'Add a role',
           'Add an employee',
           'Update an employee role',
+          'Update employee manager',
           'Exit',
         ],
       },
@@ -55,6 +56,9 @@ async function main() {
         break;
       case 'Update an employee role':
         await updateEmployeeRole();
+        break;
+      case 'Update employee manager':
+        await updateEmployeeManager();
         break;
     }
   }
@@ -171,5 +175,22 @@ async function updateEmployeeRole() {
   await connection.query('UPDATE employee SET role_id = ? WHERE id = ?', [newRoleId, employeeId]);
   await connection.end();
 }
-
+async function updateEmployeeManager() {
+  const { employeeId, newManagerId } = await inquirer.prompt([
+    {
+      type: 'input',
+      name: 'employeeId',
+      message: 'Enter the employee ID you want to update:',
+    },
+    {
+      type: 'input',
+      name: 'newManagerId',
+      message: 'Enter the new manager ID for the employee:',
+    },
+  ]);
+  a;
+  const connection = await mysql.createConnection(dbConfig);
+  await connection.query('UPDATE employee SET manager_id = ? WHERE id = ?', [newManagerId, employeeId]);
+  await connection.end();
+}
 main();
