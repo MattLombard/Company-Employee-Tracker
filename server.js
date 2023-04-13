@@ -1,6 +1,7 @@
 const inquirer = require('inquirer');
 const mysql = require('mysql2/promise');
 const consoleTable = require('console.table');
+require('dotenv').config();
 
 const dbConfig = {
   host: process.env.DB_HOST,
@@ -141,6 +142,7 @@ async function addRole() {
 
   const connection = await mysql.createConnection(dbConfig);
   await connection.query('INSERT INTO role (title, department_id, salary) VALUES (?, ?, ?)', [title, departmentId, salary]);
+  console.log('Role added!');
   await connection.end();
 }
 
@@ -176,6 +178,7 @@ async function addEmployee() {
     roleId,
     managerId || null,
   ]);
+  console.log('Employee added!');
   await connection.end();
 }
 
@@ -196,6 +199,7 @@ async function updateEmployeeRole() {
 
   const connection = await mysql.createConnection(dbConfig);
   await connection.query('UPDATE employee SET role_id = ? WHERE id = ?', [newRoleId, employeeId]);
+  console.log('Employee role updated!');
   await connection.end();
 }
 async function updateEmployeeManager() {
@@ -213,9 +217,8 @@ async function updateEmployeeManager() {
     },
   ]);
   const connection = await mysql.createConnection(dbConfig);
-
   await connection.query('UPDATE employee SET manager_id = ? WHERE id = ?', [newManagerId, employeeId]);
-  console.log('Employee updated!');
+  console.log('Employee manager updated!');
   await connection.end();
 }
 
