@@ -115,7 +115,7 @@ async function addRole() {
   ]);
 
   const connection = await mysql.createConnection(dbConfig);
-  await connection.query('INSERT INTO roles (title,department_id, salary) VALUES (?, ?, ?)', [title, departmentId, salary]);
+  await connection.query('INSERT INTO role (title, department_id, salary) VALUES (?, ?, ?)', [title, departmentId, salary]);
   await connection.end();
 }
 
@@ -154,7 +154,22 @@ async function addEmployee() {
 }
 
 async function updateEmployeeRole() {
-  //  update an employee role goes here
+  const { employeeId, newRoleId } = await inquirer.prompt([
+    {
+      type: 'input',
+      name: 'employeeId',
+      message: 'Enter the employee ID you want to update:',
+    },
+    {
+      type: 'input',
+      name: 'newRoleId',
+      message: 'Enter the new role ID for the employee:',
+    },
+  ]);
+
+  const connection = await mysql.createConnection(dbConfig);
+  await connection.query('UPDATE employee SET role_id = ? WHERE id = ?', [newRoleId, employeeId]);
+  await connection.end();
 }
 
 main();
