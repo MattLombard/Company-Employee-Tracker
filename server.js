@@ -3,10 +3,10 @@ const mysql = require('mysql2/promise');
 const consoleTable = require('console.table');
 
 const dbConfig = {
-  host: 'localhost',
-  user: 'root',
-  password: 'Rutgers01040104',
-  database: 'employees_db',
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
 };
 
 async function main() {
