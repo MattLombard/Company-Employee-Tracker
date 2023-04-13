@@ -120,7 +120,37 @@ async function addRole() {
 }
 
 async function addEmployee() {
-  //  add an employee goes here
+  const { firstName, lastName, roleId, managerId } = await inquirer.prompt([
+    {
+      type: 'input',
+      name: 'firstName',
+      message: "Enter the employee's first name:",
+    },
+    {
+      type: 'input',
+      name: 'lastName',
+      message: "Enter the employee's last name:",
+    },
+    {
+      type: 'input',
+      name: 'roleId',
+      message: "Enter the employee's role ID:",
+    },
+    {
+      type: 'input',
+      name: 'managerId',
+      message: "Enter the employee's manager ID (leave blank if none):",
+    },
+  ]);
+
+  const connection = await mysql.createConnection(dbConfig);
+  await connection.query('INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)', [
+    firstName,
+    lastName,
+    roleId,
+    managerId || null,
+  ]);
+  await connection.end();
 }
 
 async function updateEmployeeRole() {
