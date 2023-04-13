@@ -26,6 +26,7 @@ async function main() {
           'Update an employee role',
           'Update employee manager',
           'View employees by manager',
+          'View employees by department',
           'Exit',
         ],
       },
@@ -63,6 +64,9 @@ async function main() {
         break;
       case 'View employees by manager':
         await viewEmployeesByManager();
+        break;
+      case 'View employees by department':
+        await viewEmployeesByDepartment();
         break;
     }
   }
@@ -193,7 +197,9 @@ async function updateEmployeeManager() {
     },
   ]);
   const connection = await mysql.createConnection(dbConfig);
+
   await connection.query('UPDATE employee SET manager_id = ? WHERE id = ?', [newManagerId, employeeId]);
+  console.log('Employee updated!');
   await connection.end();
 }
 
@@ -208,6 +214,24 @@ async function viewEmployeesByManager() {
 
   const connection = await mysql.createConnection(dbConfig);
   const [rows] = await connection.query('SELECT * FROM employee WHERE manager_id = ?', [managerId]);
+  console.table(rows);
+  await connection.end();
+}
+
+async function viewEmployeesByDepartment() {
+  const { departmentId } = await inquirer.prompt([
+    {
+      type: 'input',
+      name: 'departmentId',
+      message: 'Enter the department ID to view its employees:',
+    },
+  ]);
+
+  const connection = await mysql.createConnection(dbConfig);
+  const [rows] = await connection.query(
+    'SELECT * FROM employee INNER JOIN roles ON employee.role_id = role.id WHERE role.department_id = ?',
+    [departmentId]
+  );
   console.table(rows);
   await connection.end();
 }
