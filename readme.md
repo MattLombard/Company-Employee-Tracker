@@ -8,6 +8,8 @@ To use the application, users must have Node.js and MySQL installed on their com
 
 Once the database is set up, users can run the application by running the node server.js command in their terminal. They will be presented with a list of options, which they can select using the arrow keys and Enter key. Based on the selected option, the application will query the database and display the appropriate data or prompt the user to enter new data.
 
+Link to walkthrough video: https://drive.google.com/file/d/1YYM8SBzltHJMEAwDSsZ9OoCEa0druQdi/view
+
 ## Collaborators
 
 Sarah Miller
